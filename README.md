@@ -1,6 +1,6 @@
 # Gemini Omni Video Skills
 
-A production-ready library of agent skills designed to orchestrate video generation, structured prompting, and stateful video editing with Gemini Omni Flash (`gemini-omni-flash-preview` / `bouncybohr`).
+A production-ready library of agent skills designed to orchestrate video generation, structured prompting, and stateful video editing with Gemini Omni Flash (`gemini-omni-flash-preview`).
 
 These skills are optimized for **Progressive Disclosure** to keep token usage low while giving LLM agents full access to advanced generation patterns, parameters, and workflows.
 

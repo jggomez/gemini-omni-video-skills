@@ -26,8 +26,9 @@ mcp = FastMCP("Gemini Omni Video Server")
 
 # Constants
 OMNI_MODEL = "gemini-omni-flash-preview"
-SESSION_FILE = os.path.join(os.getcwd(), ".omni_mcp_session.json")
-OUTPUT_DIR = os.path.join(os.getcwd(), "output_videos")
+HOME_DIR = os.path.expanduser("~")
+SESSION_FILE = os.path.join(HOME_DIR, ".gemini_omni_mcp_session.json")
+OUTPUT_DIR = os.path.join(HOME_DIR, "gemini_omni_outputs")
 
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)

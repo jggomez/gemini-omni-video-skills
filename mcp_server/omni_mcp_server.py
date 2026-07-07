@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# /// script
+# dependencies = [
+#   "google-genai",
+#   "mcp",
+#   "httpx",
+# ]
+# ///
 import os
 import sys
 import json

@@ -131,6 +131,50 @@ Every skill must adhere to the following directory layout and metadata structure
 
 ---
 
+## 🔌 Model Context Protocol (MCP) Server
+
+This repository includes a built-in MCP server ([omni_mcp_server.py](file:///Users/jggomez/Documents/jggomez/code/gemini-omni-video-skills/omni_mcp_server.py)) that exposes Gemini Omni video generation and editing capabilities directly as tools to AI coding agents (like Claude Desktop, Cursor, or Claude Code).
+
+### ⚙️ Prerequisites
+Ensure the following packages are installed in your Python environment:
+```bash
+pip install google-genai mcp httpx
+```
+
+### 🚀 Claude Desktop Configuration
+Add the server configuration to your `claude_desktop_config.json` (typically located at `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+
+```json
+{
+  "mcpServers": {
+    "gemini-omni-video": {
+      "command": "python3",
+      "args": [
+        "/Users/jggomez/Documents/jggomez/code/gemini-omni-video-skills/omni_mcp_server.py"
+      ],
+      "env": {
+        "GEMINI_API_KEY": "YOUR_GEMINI_API_KEY"
+      }
+    }
+  }
+}
+```
+
+### 🧰 Available Tools
+
+*   **`generate_video`**: Generate a new video from a structured 6-dimension prompt using Gemini Omni Flash.
+    *   `prompt` (string, required): Detailed prompt describing layout, camera movement, styles, etc.
+    *   `aspect_ratio` (string, optional): Frame layout (`"16:9"` or `"9:16"`). Default is `"16:9"`.
+    *   `image_path` (string, optional): Absolute path to a local image reference to animate (Image-to-Video).
+*   **`edit_video`**: Edit the last generated video using a targeted conversational instruction.
+    *   `edit_prompt` (string, required): Targeted change request. The tool automatically prefixes it with preservation guardrails.
+*   **`get_last_video`**: Get details and the local path of the last generated video in the active session.
+*   **`clear_session`**: Clear the session state (resets the interaction chaining token).
+
+The server automatically creates an `output_videos/` directory in its current working directory and saves all generated/edited MP4s there.
+
+---
+
 ## 🤝 Contribution Guidelines
 
 1.  Create a branch for your proposed skill/refactor: `git checkout -b feature/new-skill-name`.

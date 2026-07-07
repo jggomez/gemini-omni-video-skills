@@ -4,7 +4,7 @@ A production-ready library of agent skills designed to orchestrate video generat
 
 These skills are optimized for **Progressive Disclosure** to keep token usage low while giving LLM agents full access to advanced generation patterns, parameters, and workflows.
 
-[![Validate Skills](https://github.com/your-username/gemini-omni-video-skills/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/your-username/gemini-omni-video-skills/actions/workflows/validate-skills.yml)
+[![Validate Skills](https://github.com/jggomez/gemini-omni-video-skills/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/jggomez/gemini-omni-video-skills/actions/workflows/validate-skills.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -61,18 +61,34 @@ gemini-omni-video-skills/
 
 To make these skills discoverable by other AI agents (such as Google Antigravity, Claude Code, etc.), choose one of the following integration paths:
 
-### Option A: Local Symlinking (Recommended for Development)
-Symlink this repository's folders into your agent's local skills directory (typically under `~/.gemini/skills/` or equivalent):
+### Option A: Install via `npx skills` (Recommended for Claude Code & Vercel Skills CLI)
+You can install individual skills directly from this GitHub repository using the `npx skills` package manager:
+```bash
+# Install the Gemini Omni Flash master orchestrator
+npx skills add jggomez/gemini-omni-video-skills/skills/gemini-omni-flash
 
+# Install the Prompt Architect skill
+npx skills add jggomez/gemini-omni-video-skills/skills/gemini-omni-prompt-architect
+
+# Install the Vibe Video Prompt Engineering skill
+npx skills add jggomez/gemini-omni-video-skills/skills/vibe-video-prompt-engineering
+```
+
+To run a skill temporarily in your active agent session without permanent installation, run:
+```bash
+npx skills use jggomez/gemini-omni-video-skills/skills/gemini-omni-flash
+```
+
+### Option B: Local Symlinking (Alternative for Development)
+Symlink this repository's folders into your agent's local skills directory (typically under `~/.gemini/skills/` or equivalent):
 ```bash
 ln -s "$(pwd)/skills/gemini-omni-flash" ~/.gemini/skills/gemini-omni-flash
 ln -s "$(pwd)/skills/gemini-omni-prompt-architect" ~/.gemini/skills/gemini-omni-prompt-architect
 ln -s "$(pwd)/skills/vibe-video-prompt-engineering" ~/.gemini/skills/vibe-video-prompt-engineering
 ```
 
-### Option B: Configuration Declaration
+### Option C: Configuration Declaration
 Point your agent runner's config file (e.g. `agent.json`, `config.yaml`, or setup scripts) to include the absolute paths of the skills folders:
-
 ```json
 {
   "skills_paths": [

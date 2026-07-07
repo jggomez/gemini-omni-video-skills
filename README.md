@@ -101,36 +101,6 @@ Point your agent runner's config file (e.g. `agent.json`, `config.yaml`, or setu
 
 ---
 
-## 🧪 Validating Skills Locally
-
-Before pushing changes to GitHub, run the validation tool to ensure the skill formats, YAML frontmatter, code blocks, and internal references are free of syntax and structural errors:
-
-```bash
-python3 scripts/validate.py
-```
-
-### Skill Specification Standard
-Every skill must adhere to the following directory layout and metadata structure:
-
-1.  **Directory Name:** Match the lowercase, hyphenated `name` field in the frontmatter.
-2.  **`SKILL.md`:** Must reside in the skill root directory.
-3.  **Frontmatter:** Must be defined at the top of `SKILL.md` using valid YAML block boundaries:
-    ```yaml
-    ---
-    name: name-of-your-skill
-    description: Concise description of when to use this skill
-    version: 1.0.0
-    author: Author/Org
-    category: functional-category
-    tags: [tag1, tag2]
-    ---
-    ```
-4.  **Syntax Verification:**
-    *   All code blocks (```language ... ```) must be correctly opened and closed.
-    *   Any relative file paths starting with `references/` (e.g., `references/text_to_video.md`) must resolve to valid physical files in the skill's subdirectory.
-
----
-
 ## 🔌 Model Context Protocol (MCP) Server
 
 This repository includes a built-in MCP server ([omni_mcp_server.py](file:///Users/jggomez/Documents/jggomez/code/gemini-omni-video-skills/mcp_server/omni_mcp_server.py)) that exposes Gemini Omni video generation and editing capabilities directly as tools to AI coding agents (like Claude Desktop, Cursor, or Claude Code).

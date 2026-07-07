@@ -133,7 +133,7 @@ Every skill must adhere to the following directory layout and metadata structure
 
 ## 🔌 Model Context Protocol (MCP) Server
 
-This repository includes a built-in MCP server ([omni_mcp_server.py](file:///Users/jggomez/Documents/jggomez/code/gemini-omni-video-skills/omni_mcp_server.py)) that exposes Gemini Omni video generation and editing capabilities directly as tools to AI coding agents (like Claude Desktop, Cursor, or Claude Code).
+This repository includes a built-in MCP server ([omni_mcp_server.py](file:///Users/jggomez/Documents/jggomez/code/gemini-omni-video-skills/mcp_server/omni_mcp_server.py)) that exposes Gemini Omni video generation and editing capabilities directly as tools to AI coding agents (like Claude Desktop, Cursor, or Claude Code).
 
 ### ⚙️ Prerequisites
 Ensure the following packages are installed in your Python environment:
@@ -150,7 +150,7 @@ Add the server configuration to your `claude_desktop_config.json` (typically loc
     "gemini-omni-video": {
       "command": "python3",
       "args": [
-        "/Users/jggomez/Documents/jggomez/code/gemini-omni-video-skills/omni_mcp_server.py"
+        "/Users/jggomez/Documents/jggomez/code/gemini-omni-video-skills/mcp_server/omni_mcp_server.py"
       ],
       "env": {
         "GEMINI_API_KEY": "YOUR_GEMINI_API_KEY"

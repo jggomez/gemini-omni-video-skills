@@ -19,6 +19,7 @@ Ideal for smartphone screens, mobile advertising, and specialized social media v
 
 #### Python SDK Implementation
 ```python
+import base64
 from google import genai
 
 client = genai.Client()
@@ -31,4 +32,7 @@ interaction = client.interactions.create(
         "aspect_ratio": "9:16"  # Activates vertical framing
     }
 )
+
+with open("example_vertical.mp4", "wb") as f:
+    f.write(base64.b64decode(interaction.output_video.data))
 ```

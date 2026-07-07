@@ -90,6 +90,7 @@ You can specify exact durations for events:
     - `"After 3 seconds, a woman enters the scene."`
     - `"At 5s the chorus starts in the background audio."`
     - `"Every 2s cut to a new frame."`
+    - `"In a rapid fire sequence, every half a second (12 frames at 24fps) change the scene to a new location."`
 *   **Timecode syntax:**
     - `[0-3s] A person is walking`
     - `[3-6s] They stop and turn around`
@@ -121,15 +122,21 @@ When editing an existing video (turn >= 2), ALWAYS:
 
 ---
 
-## Anti-patterns (Never Use)
+## Anti-patterns & Limitations (Never Use)
 
-| Anti-pattern | Why | Alternative |
+| Anti-pattern / Limitation | Why | Alternative / Mitigation |
 |---|---|---|
 | "make it cool" | Abstract, unstructured | Define exact style + lighting |
 | "animate it" | No kinetic spec | Describe exact motion vector |
 | "better quality" | Subjective | Define rendering style explicitly |
 | Long adjective stacks | Over-specifies what model handles | Trust model's world knowledge |
 | Describing physics | Model handles naturally | Focus on macro intent |
+| Uploading audio references | Unsupported by API | Describe audio/music in text prompt |
+| Multiple video references | Unsupported by API | Prompt using only one video reference |
+| Video extension / interpolation | Unsupported by API | Render a complete new generation |
+| YouTube URL inputs | Unsupported by API | Download and upload file via Files API (if allowed) |
+| Minors/recognizable people in inputs | Blocked by safety filter | Use generic representations |
+| Uploading custom videos (EEA/UK/CH) | Editing uploaded files blocked | Only use on generated videos (supported) |
 
 ---
 

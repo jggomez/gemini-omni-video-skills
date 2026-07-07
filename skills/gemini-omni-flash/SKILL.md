@@ -70,7 +70,7 @@ When writing, reviewing, or debugging execution pipelines for Gemini Omni Flash,
 *   **API Exclusivity:** The model is accessible *only* via the Interactions API using `create_interaction` (or `client.interactions.create`)[cite: 1]. It is completely incompatible with traditional Veo endpoints like `generate_videos`[cite: 1].
 *   **The 4-Turn Quality Limit:** Warn developers that fine-grained structural consistency and character fidelity decay exponentially after the **4th consecutive conversational modification turn** on a single interaction chain[cite: 1].
 *   **Parameter Deprecation:** `system_instructions`, `temperature`, `top_p`, and negative prompt matrices are entirely unsupported natively[cite: 1]. Negative parameters must be handled via direct conversational instructions (e.g., *"Do not render X"*)[cite: 1].
-*   **EEA Regional Block:** Operations running inside the European Economic Area (EEA, UK, Switzerland) are strictly restricted[cite: 1]. Uploading external personal video files for editing or processing references with unauthorized celebrity/children likenesses is fully blocked[cite: 1].
+*   **EEA Regional Block:** Operations running inside the European Economic Area (EEA, UK, Switzerland) are restricted. Uploading/editing videos containing minors or recognizable people is blocked. Additionally, editing custom uploaded videos is unsupported for users in the EEA, UK, and Switzerland (editing model-generated videos remains supported).
 *   **Invisible Provenance:** Every generated video asset natively burns an un-removable, invisible programmatic SynthID watermarking payload for security verification[cite: 1].
 
 ---

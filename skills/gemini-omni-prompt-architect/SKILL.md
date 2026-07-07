@@ -56,6 +56,7 @@ You can direct events to trigger at exact durations:
   - `"After 3 seconds, a woman enters the scene."`
   - `"At 5s the chorus starts in the background audio."`
   - `"Every 2s cut to a new frame."`
+  - `"In a rapid fire sequence, every half a second (12 frames at 24fps) change the scene to a new location."`
 - **Timecode syntax:**
   - `[0-3s] A person is walking`
   - `[3-6s] They stop and turn around`
@@ -74,7 +75,7 @@ When handling uploaded images, use tags to declare their roles:
    - `<IMAGE_REF_N>`: Reference style/character starting from 0. (e.g. `in the style of <IMAGE_REF_0> a woman is walking`)
 2. **Explicit Declarations:**
    - Format: `[# Sources <FIRST_FRAME>@Image1] [# References <IMAGE_REF_0>@Image2] a woman <IMAGE_REF_0> is walking.`
-   - Guiding instruction suffix: `"Use Image1 as the starting frame. Use Image2 as a reference for the video generation. The reference image should not be used as a literal initial frame."`
+   - Guiding instruction suffix: Use `"Use Image1 as the starting frame."` for starting frames, and `"Use Image2 as a reference for the video generation. The images should not be used as literal initial frames."` for reference images.
 
 ---
 

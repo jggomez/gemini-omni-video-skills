@@ -167,7 +167,28 @@ Add to your `claude_desktop_config.json`:
 *   **`get_last_video`**: Get details and the local path of the last generated video in the active session.
 *   **`clear_session`**: Clear the session state (resets the interaction chaining token).
 
-The server automatically creates an `output_videos/` directory in its current working directory and saves all generated/edited MP4s there.
+The server automatically creates an `gemini_omni_outputs/` directory in your home directory and saves all generated/edited MP4s there.
+
+### 📝 Reusable Prompt Templates (MCP Prompts)
+
+The server exposes 4 parameterized prompt templates that implement Gemini Omni prompt engineering best practices:
+
+*   **`create_omni_prompt`**: Builds a fully optimized 6-dimension prompt.
+    *   `action` (string, required): Main subject action or behavior.
+    *   `style` (string, required): Visual aesthetic style (e.g. `realistic film`, `claymation`).
+    *   `location` (string, required): Environmental setting.
+    *   `lighting` (string, required): Lighting attributes.
+    *   `motion` (string, required): Camera movement vectors.
+    *   `text_overlay` (string, optional): Text layout overlay guidelines.
+*   **`edit_omni_prompt`**: Formats edit instructions with mandatory turn preservation prefix.
+    *   `edit_instruction` (string, required): Change to apply (e.g. `Make the coat red`).
+*   **`rapid_fire_prompt`**: Formats a sequence of scenes shifting locations every 0.5 seconds.
+    *   `style` (string, required): Aesthetic theme.
+    *   `locations` (string, required): Comma-separated list of locations.
+*   **`timecode_prompt`**: Formats a narrative sequence using precise timecodes.
+    *   `scene_0_3s` (string, required): Staged action from 0 to 3 seconds.
+    *   `scene_3_6s` (string, required): Staged action from 3 to 6 seconds.
+    *   `scene_6_10s` (string, required): Staged action from 6 to 10 seconds.
 
 ---
 

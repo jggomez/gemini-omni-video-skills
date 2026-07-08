@@ -16,7 +16,11 @@ from mcp_server.omni_mcp_server import (
     edit_video,
     get_last_video,
     clear_session,
-    SessionState
+    SessionState,
+    create_omni_prompt,
+    edit_omni_prompt,
+    rapid_fire_prompt,
+    timecode_prompt
 )
 
 class TestMCPServerLogic(unittest.TestCase):
@@ -134,6 +138,40 @@ class TestMCPServerLogic(unittest.TestCase):
         self.assertIsNone(state.last_interaction_id)
         self.assertEqual(state.turn_count, 0)
 
+    def test_create_omni_prompt(self):
+        prompt = create_omni_prompt(
+            action="A futuristic car racing",
+            style="anime visual art style",
+            location="neo-tokyo highway",
+            lighting="volumetric pink neon light beams",
+            motion="fast camera pan shot"
+        )
+        self.assertIn("A futuristic car racing", prompt)
+        self.assertIn("anime visual art style", prompt)
+        self.assertIn("neo-tokyo highway", prompt)
+        self.assertIn("volumetric pink neon light beams", prompt)
+        self.assertIn("fast camera pan shot", prompt)
+
+    def test_edit_omni_prompt(self):
+        prompt = edit_omni_prompt(edit_instruction="Change the car color to yellow.")
+        self.assertEqual(prompt, "Edit this keeping everything else identical. Change the car color to yellow.")
+
+    def test_rapid_fire_prompt(self):
+        prompt = rapid_fire_prompt(style="watercolor", locations="Rome, Paris, Madrid")
+        self.assertIn("rapid fire sequence", prompt)
+        self.assertIn("watercolor", prompt)
+        self.assertIn("Rome, Paris, Madrid", prompt)
+
+    def test_timecode_prompt(self):
+        prompt = timecode_prompt(
+            scene_0_3s="A dog starts running",
+            scene_3_6s="It catches a frisbee",
+            scene_6_10s="It happily wags its tail"
+        )
+        self.assertIn("[0-3s] A dog starts running", prompt)
+        self.assertIn("[3-6s] It catches a frisbee", prompt)
+        self.assertIn("[6-10s] It happily wags its tail", prompt)
+
 
 class TestMCPServerTransport(unittest.TestCase):
     """
@@ -216,6 +254,104 @@ class TestMCPServerTransport(unittest.TestCase):
             
             self.assertIn("prompt", tools["generate_video"]["inputSchema"]["required"])
             self.assertIn("edit_prompt", tools["edit_video"]["inputSchema"]["required"])
+
+        finally:
+            if proc.stdin:
+                proc.stdin.close()
+            if proc.stdout:
+                proc.stdout.close()
+            if proc.stderr:
+                proc.stderr.close()
+            proc.terminate()
+            proc.wait()
+
+    def test_mcp_prompts_list_and_get(self):
+        # Spawn the process
+        proc = subprocess.Popen(
+            [sys.executable, self.server_path],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        try:
+            # 1. Send initialize request
+            init_request = {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "initialize",
+                "params": {
+                    "protocolVersion": "2024-11-05",
+                    "capabilities": {},
+                    "clientInfo": {"name": "test-client", "version": "1.0.0"}
+                }
+            }
+            proc.stdin.write(json.dumps(init_request) + "\n")
+            proc.stdin.flush()
+            proc.stdout.readline()  # skip initialize response
+
+            # 2. Send initialized notification
+            initialized_notification = {
+                "jsonrpc": "2.0",
+                "method": "notifications/initialized"
+            }
+            proc.stdin.write(json.dumps(initialized_notification) + "\n")
+            proc.stdin.flush()
+
+            # 3. Send prompts/list request
+            list_request = {
+                "jsonrpc": "2.0",
+                "id": 2,
+                "method": "prompts/list"
+            }
+            proc.stdin.write(json.dumps(list_request) + "\n")
+            proc.stdin.flush()
+
+            # Read prompts/list response
+            line = proc.stdout.readline()
+            response = json.loads(line)
+
+            self.assertEqual(response.get("jsonrpc"), "2.0")
+            self.assertEqual(response.get("id"), 2)
+            self.assertIn("result", response)
+            self.assertIn("prompts", response["result"])
+
+            prompts = {p["name"]: p for p in response["result"]["prompts"]}
+            self.assertIn("create_omni_prompt", prompts)
+            self.assertIn("edit_omni_prompt", prompts)
+            self.assertIn("rapid_fire_prompt", prompts)
+            self.assertIn("timecode_prompt", prompts)
+
+            # 4. Send prompts/get request for edit_omni_prompt
+            get_request = {
+                "jsonrpc": "2.0",
+                "id": 3,
+                "method": "prompts/get",
+                "params": {
+                    "name": "edit_omni_prompt",
+                    "arguments": {
+                        "edit_instruction": "Add a dog."
+                    }
+                }
+            }
+            proc.stdin.write(json.dumps(get_request) + "\n")
+            proc.stdin.flush()
+
+            # Read prompts/get response
+            line = proc.stdout.readline()
+            response = json.loads(line)
+
+            self.assertEqual(response.get("jsonrpc"), "2.0")
+            self.assertEqual(response.get("id"), 3)
+            self.assertIn("result", response)
+            self.assertIn("messages", response["result"])
+            
+            # Verify structured output message
+            messages = response["result"]["messages"]
+            self.assertEqual(len(messages), 1)
+            self.assertEqual(messages[0]["role"], "user")
+            self.assertIn("Edit this keeping everything else identical. Add a dog.", messages[0]["content"]["text"])
 
         finally:
             if proc.stdin:

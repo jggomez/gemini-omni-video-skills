@@ -372,6 +372,90 @@ def clear_session() -> str:
     state.clear()
     return "Session cleared successfully. Subsequent edits will require starting a new generation."
 
+@mcp.prompt()
+def create_omni_prompt(
+    action: str,
+    style: str,
+    location: str,
+    lighting: str,
+    motion: str,
+    text_overlay: Optional[str] = None
+) -> str:
+    """
+    Builds a fully optimized 6-dimension prompt for Gemini Omni video creation.
+
+    Args:
+        action: The main action or subject behavior.
+        style: Visual style (e.g. realistic film, claymation, bold outline anime).
+        location: Environmental setting or background details.
+        lighting: Light properties (e.g. golden hour volumetric rays, dimmed neon lights).
+        motion: Camera motion and viewpoints (e.g. dolly zoom, handheld tracking shot).
+        text_overlay: Optional exact text to render (e.g. street sign that says "Hello").
+    """
+    text_part = ""
+    if text_overlay:
+        text_part = f" Text rendering: {text_overlay}."
+    
+    return (
+        f"Generate a video showing: {action}. "
+        f"Visual style: {style}. "
+        f"Camera and framing: {motion}. "
+        f"Location/Environment: {location}. "
+        f"Lighting/Volumetrics: {lighting}. "
+        f"No cuts or scene transitions unless specified.{text_part}"
+    )
+
+@mcp.prompt()
+def edit_omni_prompt(
+    edit_instruction: str
+) -> str:
+    """
+    Applies the turn-based preservation guardrails to edit an existing video.
+
+    Args:
+        edit_instruction: Exact modification instructions (e.g. 'Make the jacket red').
+    """
+    return f"Edit this keeping everything else identical. {edit_instruction}"
+
+@mcp.prompt()
+def rapid_fire_prompt(
+    style: str,
+    locations: str
+) -> str:
+    """
+    Builds a prompt for a rapid-fire sequence of scenes/locations.
+
+    Args:
+        style: Cinematic style of the sequence (e.g. grainy analog film, risograph print).
+        locations: Comma-separated list of locations (e.g. Paris, Tokyo, London).
+    """
+    return (
+        f"In a rapid fire sequence, every half a second (12 frames at 24fps) change the scene to a new location. "
+        f"Visual style: {style}. "
+        f"List of locations: {locations}. "
+        f"No dialogue. Keep transitions organic."
+    )
+
+@mcp.prompt()
+def timecode_prompt(
+    scene_0_3s: str,
+    scene_3_6s: str,
+    scene_6_10s: str
+) -> str:
+    """
+    Builds a timecode-based prompt sequence to stage actions at exact times.
+
+    Args:
+        scene_0_3s: Description of action from 0 to 3 seconds.
+        scene_3_6s: Description of action from 3 to 6 seconds.
+        scene_6_10s: Description of action from 6 to 10 seconds.
+    """
+    return (
+        f"[0-3s] {scene_0_3s}\n"
+        f"[3-6s] {scene_3_6s}\n"
+        f"[6-10s] {scene_6_10s}"
+    )
+
 if __name__ == "__main__":
     # Start standard stdio MCP Server transport
     mcp.run()
